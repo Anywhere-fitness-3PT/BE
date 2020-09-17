@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const helmet = require("helmet")
+const clientsRouter = require("./clients/clients-router")
 
 const server = express()
 
@@ -8,8 +9,8 @@ server.use(cors())
 server.use(helmet())
 server.use(express.json())
 
-server.use("/api/auth")
-server.use("/api")
+server.use(clientsRouter)
+
 server.get("/", (req, res) => {
     res.json({
         message: "Welcome to Anywhere Fitness",
@@ -19,7 +20,7 @@ server.get("/", (req, res) => {
 server.use((err, req, res, next) => {
     console.log(err)
     res.status(500).json({
-        message: "Sorry, somethign went wrong!"
+        message: "Sorry, something went wrong!"
     })
 })
 
