@@ -7,8 +7,8 @@
     "test": "cross-env NODE_ENV=testing jest",
     "start": "node index.js",
     "server": "cross-env NODE_ENV=development nodemon index.js",
-    "migrate": "knex migrate:latest",
-    "seed": "knex seed:run"
+    "migrate": "npx knex migrate:latest",
+    "seed": "npx knex seed:run"
   },
   "jest": {
     "testEnvironment": "node"

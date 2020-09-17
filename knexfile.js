@@ -1,10 +1,11 @@
+require('dotenv').config()
+
 module.exports = {
     development: {
         client: "pg",
         useNullAsDefault: true,
-        connection: process.env.DATABASE_URL,
+        connection: process.env.DB_URL,
         migrations: {
-            tableName: "knex_migrations",
             directory: "./database/migrations",
         },
         seeds: {
@@ -13,9 +14,8 @@ module.exports = {
     },
     test: {
         client: "pg",
-        connection: process.env.DB_TEST,
+        connection: process.env.DB_URL,
         migrations: {
-            tableName: "knex_migrations",
             directory: "./database/migrations",
         },
         seeds: {
@@ -24,13 +24,12 @@ module.exports = {
     },
     production: {
         client: "pg",
-        connection: process.env.DATABASE_URL,
+        connection: process.env.DB_URL,
         migrations: {
-            tableName: "knex_migrations",
             directory: "./database/migrations",
         },
         seeds: {
-            directpry: "./database/seeds",
+            directory: "./database/seeds",
         },
     },
 };

@@ -6,8 +6,8 @@ exports.up = async function(knex) {
           .integer("type")
           .notNullable()
           .unsigned()
-          references("id")
-          inTable("class_types")
+          .references("id")
+          .inTable("class_types")
           .onDelete("CASCADE")
           .onUpdate("CASCADE")
         table.time("start_time").notNullable()
@@ -24,11 +24,11 @@ exports.up = async function(knex) {
         table.integer("attendees").notNullable().default(0)
         table.integer("max_size").notNullable()
         table.string("schedule").notNullable()
-        table.text("description").nullable()
+        table.text("description")
         table.timestamps(true, true)
     })
 };
 
 exports.down = async function(knex) {
-    await knex.schema.dropTableIfExists("classes")
+    await knex.schema.xropTableIfExists("classes")
 };
