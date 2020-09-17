@@ -1,9 +1,9 @@
-require('dotenv').config()
 
+require ('dotenv').config()
 module.exports = {
     development: {
-        client: "pg",
-        // useNullAsDefault: true,
+        client: 'pg',
+
         connection: {
             host : process.env.DB_HOST,
             user : process.env.DB_USER,
@@ -11,11 +11,13 @@ module.exports = {
             database : process.env.DB_DATABASE,
         },
         migrations: {
-            directory: "./database/migrations",
+
+          directory: "./database/migrations",
+
         },
         seeds: {
             directory: "./database/seeds",
-        },
+        }
     },
     test: {
         client: "pg",
@@ -38,4 +40,3 @@ module.exports = {
         },
     },
 };
-
