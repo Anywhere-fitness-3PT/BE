@@ -1,7 +1,9 @@
+
 require ('dotenv').config()
 module.exports = {
     development: {
         client: 'pg',
+
         connection: {
             host : process.env.DB_HOST,
             user : process.env.DB_USER,
@@ -9,7 +11,9 @@ module.exports = {
             database : process.env.DB_DATABASE,
         },
         migrations: {
+
           directory: "./database/migrations",
+
         },
         seeds: {
             directory: "./database/seeds",
@@ -17,9 +21,8 @@ module.exports = {
     },
     test: {
         client: "pg",
-        connection: process.env.DB_TEST,
+        connection: process.env.DB_URL,
         migrations: {
-            tableName: "knex_migrations",
             directory: "./database/migrations",
         },
         seeds: {
@@ -30,7 +33,6 @@ module.exports = {
         client: "pg",
         connection: process.env.DB_URL,
         migrations: {
-            tableName: "knex_migrations",
             directory: "./database/migrations",
         },
         seeds: {
