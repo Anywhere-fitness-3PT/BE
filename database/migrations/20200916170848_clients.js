@@ -1,7 +1,7 @@
 
 exports.up = async function(knex) {
     await knex.schema.createTable("clients", (t) => {
-        t.increments("id").primary()
+        t.increments().primary()
         t.text("firstName").notNull()
         t.text("lastName").notNull()
         t.text("email").notNull().unique()
