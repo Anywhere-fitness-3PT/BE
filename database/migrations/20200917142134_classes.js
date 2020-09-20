@@ -11,7 +11,7 @@ exports.up = async function(knex) {
           .onDelete("CASCADE")
           .onUpdate("CASCADE")
         table.time("start_time").notNullable()
-        table.time("duration").notNullable()
+        table.integer("duration").notNullable()
         table
           .integer("level")
           .notNullable()
@@ -30,5 +30,5 @@ exports.up = async function(knex) {
 };
 
 exports.down = async function(knex) {
-    await knex.schema.xropTableIfExists("classes")
+    await knex.schema.dropTableIfExists("classes")
 };

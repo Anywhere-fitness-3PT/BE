@@ -5,6 +5,7 @@ async function add(client){
     return findBy(client)
 }
 function findBy(filter){
+    console.log('test');
     return db("clients")
         .select("id","email","password")
         .where(filter)
