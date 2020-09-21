@@ -1,7 +1,7 @@
 exports.up = async function(knex) {
     await knex.schema.createTable("classes", (table) => {
         table.increments()
-        table.string("name").notNullable()
+        table.string("name").notNullable().unique()
         table
           .integer("type")
           .notNullable()
