@@ -1,28 +1,28 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const Clients = require("./clients-model")
-const restrict = require("./clients-middleware")
+const Users = require("./users-model")
+const restrict = require("./users-middleware")
 
 const router = express.Router()
 
 router.post("/register", async(req, res, next) =>{
     try{
         const {firstName, lastName, email, password} = req.body
-        const client = await Clients.findBy({email}).first();
-        if(client){
+        const user = await Users.findBy({email}).first();
+        if(user){
             res.status(409).json({
                 message: "Email Already Use"
             })
         } 
-        const newClient = await Clients.add({
+        const newUser = await Users.add({
             firstName,
             lastName,
             email,
             password: await bcrypt.hash(password, 14)
         })
 
-        res.status(201).json(newClient)
+        res.status(201).json(newUser)
     }
     catch(err){
         console.log(err)
@@ -33,14 +33,14 @@ router.post('/login', async(req, res, next) => {
     // implement login
     try {
       const { email, password } = req.body
-      const client = await Clients.findBy({ email }).first()
-      if (!client) {
+      const user = await Clients.findBy({ email }).first()
+      if (!user) {
           return res.status(401).json({
               message: "Invalid Credentials, wrong user name",
           })
       }
       // hash the password again and see if it matches what we have in the database
-      const passwordValid = await bcrypt.compare(password, client.password)
+      const passwordValid = await bcrypt.compare(password, user.password)
       if (!passwordValid) {
           return res.status(401).json({
               message: "Invalid Credentials, wrong password",
@@ -48,7 +48,7 @@ router.post('/login', async(req, res, next) => {
       }
       // generate a new JSON web token
       const token = jwt.sign({
-          id: client.id,
+          id: user.id,
           userRole: "basic", // this value would normally come from the database
       }, process.env.JWT_SECRET)
   
@@ -56,7 +56,7 @@ router.post('/login', async(req, res, next) => {
       res.cookie("token", token)
   
       res.json({
-        message: `Welcome ${client.email}!`,
+        message: `Welcome ${user.email}!`,
         token,
           })
       } catch(err) {
@@ -64,7 +64,7 @@ router.post('/login', async(req, res, next) => {
       }
   });
 
-router.get("/clients/classes", restrict(), async(req, res, next) => {
+router.get("/users/classes", restrict(), async(req, res, next) => {
     try{
         res.json(await Classes.find())
     }
