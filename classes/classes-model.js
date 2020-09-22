@@ -2,10 +2,11 @@ const db = require("../database/dbConfig")
 
 function findClasses(){
     return db("classes")
-    .select("name","instructor_name","start_time", "end_time",)
+    .select("*")
 }
 
 function findBy(filter){
+    console.log('filter ', filter);
     return db("classes")
         .select("*")
         .where(filter)
@@ -16,13 +17,18 @@ function add(newClass){
 }
 function remove(id){
     return db("classes")
-    .where("classes.id", id)
+    .where("id", id)
     .del()
 }
 function update(id, updateInfo){
     return db("classes")
-    .where("classes.id", id)
+    .where("id", id)
     .update(updateInfo)
+}
+function addAtt(classId, attendees){
+    return db("classes")
+    .where("id", classId)
+    .update(attendees)
 }
 
 module.exports= {
@@ -30,5 +36,6 @@ module.exports= {
     findBy,
     add,
     remove,
-    update
+    update,
+    addAtt
 }

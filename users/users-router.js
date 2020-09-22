@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post("/register", async(req, res, next) =>{
     try{
-        const {role_id, first_name, last_name, email, password, phone, gender} = req.body
+        const {first_name, email, password} = req.body
         const user = await Users.findBy({email}).first();
         if(user){
             res.status(409).json({
@@ -16,13 +16,9 @@ router.post("/register", async(req, res, next) =>{
         } 
         console.log('create new user');
         const newUser = await Users.add({
-            role_id, 
             first_name, 
-            last_name, 
             email,
             password: await bcrypt.hash(password, 14),
-            phone, 
-            gender
         })
 
         res.status(201).json(newUser)
