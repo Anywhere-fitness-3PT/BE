@@ -32,8 +32,7 @@ function Email(to, sub, content) {
             if (err) {
                 console.log(err);
             } else {
-                console.log("Email sent:");
-                console.log(data)
+                console.log("Email sent: " + data);
             }
         }
     );
