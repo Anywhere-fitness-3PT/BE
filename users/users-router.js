@@ -1,6 +1,9 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+
+// send Email utility
+const sendEmail = require("../utils/sendEmail")
 const Users = require("./users-model")
 const restrict = require("./users-middleware")
 
@@ -75,4 +78,3 @@ router.get("/users/classes", restrict(), async(req, res, next) => {
 })
 module.exports = router
 
-module.exports = router
