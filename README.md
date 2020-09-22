@@ -1,7 +1,17 @@
 # BE 
-### API URL : http://localhost:8000
+### API URL : https://anywherefitness-lambda.herokuapp.com
 ### API Endpoints
 
 | Method | URL                           | Description                                                                                                                                           |
 | ------ | ----------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------                                                                                      
-| POST   | /clients/register        | Register client sent in the `request body`  Return created client. |
+| POST   | /register        | Register clients/instructors sent in the `request body`  Return created users. |
+
+| POST   | /login        | Login clients/instructors sent in the `request body` |
+
+| GET  | /users/classes       | Get all available classes as long as user is login|
+
+| POST  | /users/classes       | Instructors can add classes  |
+
+| PUT  | /users/classes       | Instructors can update classes|
+
+| DELETE  | /users/classes       | Instructors delete classes|
