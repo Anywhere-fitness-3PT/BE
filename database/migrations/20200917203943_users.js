@@ -3,7 +3,6 @@ exports.up = async function(knex) {
         table.increments();
         table
           .integer("role_id")
-          .notNullable()
           .unsigned()
           .references("id")
           .inTable("user_roles")
