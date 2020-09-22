@@ -81,14 +81,7 @@ router.delete("/users/classes/:id", restrict("Instructor"), async(req, res, next
     }
 })
 
-router.put("/users/classes/:id", restrict("Instructor"), async(req, res, next) => {
-    // const { id } = req.params
-	// 	await db("users").where({ id }).update(req.body)
-	// 	const user = await db("users").where({ id }).first()
-		
-	// 	res.json(user)
-    
-    
+router.put("/users/classes/:id", restrict("Instructor"), async(req, res, next) => {    
     try{
         const {id} = req.params
         const findClass = await Classes.findBy({id}).first()
@@ -106,6 +99,24 @@ router.put("/users/classes/:id", restrict("Instructor"), async(req, res, next) =
     }
     catch(err){
         next(err)
+    }
+})
+
+router.post("/users/classes/:classId", restrict(), async(req, res, next) => {
+    const {classId} = req.params
+    const findClass = await Classes.findBy({id: classId}).first()
+    let numAtt = findClass.attendees
+    const maxAtt = findClass.max_size
+    if(numAtt >= maxAtt){
+        res.json({
+            message: "Cannot sign up for class. Class is full"
+        })
+    } else 
+    {
+        numAtt++;
+        Classes.addAtt(classId, numAtt);
+        res.json({
+            message: "You're signed up for the class" })
     }
 })
 
