@@ -1,24 +1,31 @@
 const db = require("../database/dbConfig")
 
-async function add(client){
-    await db("clients").insert(client).returning("id")
-    return findBy(client)
+async function add(user){
+    await db("users").insert(user).returning("id")
+    return findBy(user)
 }
 function findBy(filter){
-    console.log('test');
-    return db("clients")
-        .select("id","email","password")
+    return db("users")
+        .select("*")
         .where(filter)
 }
 
 function findById(id){
-    return db("clients")
+    return db("users")
         .select("id", "email")
+        .where({id})
+        .first()
+}
+function findUserRoleById(id){
+    console.log('looking for id ', id);
+    return db("user_roles")
+        .select("name")
         .where({id})
         .first()
 }
 module.exports= {
     add,
     findById,
-    findBy
+    findBy,
+    findUserRoleById
 }

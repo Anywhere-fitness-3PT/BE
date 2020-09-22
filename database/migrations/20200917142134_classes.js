@@ -2,6 +2,7 @@ exports.up = async function(knex) {
     await knex.schema.createTable("classes", (table) => {
         table.increments()
         table.string("name").notNullable().unique()
+        table.string("instructor_name").notNullable()
         table
           .integer("type")
           .notNullable()
@@ -11,7 +12,7 @@ exports.up = async function(knex) {
           .onDelete("CASCADE")
           .onUpdate("CASCADE")
         table.time("start_time").notNullable()
-        table.integer("duration").notNullable()
+        table.time("end_time").notNullable()
         table
           .integer("level")
           .notNullable()
