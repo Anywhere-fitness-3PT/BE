@@ -34,11 +34,11 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.5",
     "pg": "^8.3.3",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
-    "dotenv": "^8.2.0",
     "nodemon": "^2.0.4"
   }
 }
