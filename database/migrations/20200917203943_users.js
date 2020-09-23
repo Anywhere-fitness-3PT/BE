@@ -3,17 +3,18 @@ exports.up = async function(knex) {
         table.increments();
         table
           .integer("role_id")
+          .notNullable()
           .unsigned()
           .references("id")
           .inTable("user_roles")
           .onDelete("CASCADE")
           .onUpdate("CASCADE");
         table.string("first_name").notNullable();
-        table.string("last_name").notNullable();
+        table.string("last_name")
         table.string("email").notNullable().unique();
         table.string("password").notNullable();
-        table.string("phone").nullable();
-        table.string("gender").nullable();
+        table.string("phone")
+        table.string("gender")
         table.timestamps(true, true);
     })
 };
