@@ -1,6 +1,6 @@
-exports.seed = async function(knex) {
+exports.seed =  function(knex) {
   // delete all existing entries
-  await knex("class_levels").del()
+  return knex("class_levels").del()
   .then( async function() {
     // insert seed entries
     await knex("class_levels").insert([

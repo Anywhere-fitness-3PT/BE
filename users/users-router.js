@@ -2,11 +2,6 @@ const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
-// send Email utility
-const sendEmail = require("../utils/sendEmail")
-const Users = require("./users-model")
-const restrict = require("./users-middleware")
-
 const router = express.Router()
 
 router.post("/register", async(req, res, next) =>{
