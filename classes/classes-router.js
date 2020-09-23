@@ -114,9 +114,9 @@ router.post("/users/classes/:classId", restrict(), async(req, res, next) => {
     } else 
     {
         numAtt++;
-        Classes.addAtt(classId, numAtt);
+        await Classes.addAtt(classId, numAtt);
         res.json({
-            message: "You're signed up for the class" })
+            message: "You're signed up for the class"  })
     }
 })
 

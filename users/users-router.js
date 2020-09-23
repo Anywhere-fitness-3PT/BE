@@ -2,12 +2,13 @@ const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Users = require("./users-model")
+const restrict = require("../classes/classes-middleware")
 
 const router = express.Router()
 
 router.post("/register", async(req, res, next) =>{
     try{
-        const {first_name, email, password} = req.body
+        const {first_name, email, password, role_id} = req.body
         const user = await Users.findBy({email}).first();
         if(user){
             res.status(409).json({
@@ -19,6 +20,7 @@ router.post("/register", async(req, res, next) =>{
             first_name, 
             email,
             password: await bcrypt.hash(password, 14),
+            role_id,
         })
 
         res.status(201).json(newUser)
@@ -64,6 +66,23 @@ router.post('/login', async(req, res, next) => {
           next(err)
       }
   });
+
+  router.put("/users/:id", restrict(), async(req, res, next) => {
+    try{
+        const {id} = req.params  
+        const user = await Users.findById(id).first()
+        if(user){
+            await Users.update(id, req.body)
+            res.json({
+                message: "user is updated"
+            })
+        }
+    }
+    catch(err){
+        next(err)
+    }
+
+  } )
 
 
 module.exports = router

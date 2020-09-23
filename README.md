@@ -4,7 +4,10 @@
 
 | Method | URL                           | Description                                                                                                                                           |
 | ------ | ----------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------                                                                                      
-| POST   | /register        | Register clients/instructors sent in the `request body`  Return created users. |
+| POST  |/register        | Register clients/instructors sent in the `request body`  Return created users. |
+
+                                                             
+| POST  |/login      | Login clients/instructors sent in the `request body`|
 
 | POST   | /login        | Login clients/instructors sent in the `request body` |
 

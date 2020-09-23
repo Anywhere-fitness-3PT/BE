@@ -12,7 +12,7 @@ function findBy(filter){
 
 function findById(id){
     return db("users")
-        .select("id", "email")
+        .select("*")
         .where({id})
         .first()
 }
@@ -23,9 +23,15 @@ function findUserRoleById(id){
         .where({id})
         .first()
 }
+function update(id, updateInfo){
+    return db("users")
+    .where("id", id)
+    .update(updateInfo)
+}
 module.exports= {
     add,
     findById,
     findBy,
-    findUserRoleById
+    findUserRoleById,
+    update
 }

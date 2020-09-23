@@ -26,9 +26,11 @@ function update(id, updateInfo){
     .update(updateInfo)
 }
 function addAtt(classId, attendees){
+    console.log('classId ', classId);
+    console.log('attend ', attendees);
     return db("classes")
     .where("id", classId)
-    .update(attendees)
+    .update({attendees: attendees})
 }
 
 module.exports= {
