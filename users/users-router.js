@@ -2,13 +2,13 @@ const express = require("express")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Users = require("./users-model")
-const restrict = require("../classes/classes-middleware")
+const restrict = require("./users-middleware")
 
 const router = express.Router()
 
-router.post("/register", async(req, res, next) =>{
+router.post("/clients/register", async(req, res, next) =>{
     try{
-        const {first_name, email, password, role_id} = req.body
+        const {name, email, password} = req.body
         const user = await Users.findBy({email}).first();
         if(user){
             res.status(409).json({
@@ -17,10 +17,9 @@ router.post("/register", async(req, res, next) =>{
         } 
         console.log('create new user');
         const newUser = await Users.add({
-            first_name, 
+            name, 
             email,
             password: await bcrypt.hash(password, 14),
-            role_id,
         })
 
         res.status(201).json(newUser)
@@ -30,7 +29,7 @@ router.post("/register", async(req, res, next) =>{
         next(err)
     }
 })
-router.post('/login', async(req, res, next) => {
+router.post('/clients/login', async(req, res, next) => {
     // implement login
     try {
       const { email, password } = req.body
@@ -49,10 +48,9 @@ router.post('/login', async(req, res, next) => {
       }
 
       // generate a new JSON web token
-      const userType = await Users.findUserRoleById(user.role_id)
       const token = jwt.sign({
-          id: user.id,
-          userRole: userType.name, // this value would normally come from the database
+        //   id: user.id,
+        //   userRole: userType.name, // this value would normally come from the database
       }, process.env.JWT_SECRET)
   
       // send the token back as a cookie
@@ -60,19 +58,25 @@ router.post('/login', async(req, res, next) => {
   
       res.json({
         message: `Welcome ${user.email}!`,
-        token
+        token, 
+        user
         })
       } catch(err) {
           next(err)
       }
   });
 
-  router.put("/users/:id", restrict(), async(req, res, next) => {
+  router.put("/clients/:id", restrict(), async(req, res, next) => {
     try{
-        const {id} = req.params  
+        const {id} = req.params
         const user = await Users.findById(id).first()
+        const newInfo = req.body
+        console.log("newInfo", newInfo)
+        if (newInfo.password){
+            newInfo.password = await bcrypt.hash(newInfo.password, 14)
+        }
         if(user){
-            await Users.update(id, req.body)
+            await Users.update(id, newInfo)
             res.json({
                 message: "user is updated"
             })
@@ -83,6 +87,4 @@ router.post('/login', async(req, res, next) => {
     }
 
   } )
-
-
 module.exports = router

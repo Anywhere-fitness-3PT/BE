@@ -1,9 +1,9 @@
 
 exports.up = async function(knex) {
-    knex.schema.createTable("users_classes", (table) => {
+    await knex.schema.createTable("users_classes", (table) => {
     table
         .integer("user_id")
-        .references("users_id")
+        .references("user_id")
         .inTable("users")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")

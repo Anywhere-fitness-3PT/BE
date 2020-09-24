@@ -4,12 +4,6 @@ exports.up = async function(knex) {
         table.text("name").notNull()
         table.text("email").notNull()
         table.text("password").notNull().unique()
-        // table
-        //     .specificType("enrolled_classes", "INT[]")
-        //     .references("class_id")
-        //     .inTable("classes")
-        //     .onDelete("CASCADE")
-        //     .onUpdate("CASCADE")
         table.timestamps(true, true)
     })  
 };
