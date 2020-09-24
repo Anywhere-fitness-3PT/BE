@@ -76,27 +76,5 @@ router.delete("/clients/:id/classes/:classId", restrict(), async(req, res, next)
     }
 })
 
-router.put("/users/classes/:id", restrict("Instructor"), async(req, res, next) => {    
-    try{
-        const {id} = req.params
-        const findClass = await Classes.findBy({id}).first()
-        if(findClass){
-            await Classes.update(id, req.body)  
-            res.json({
-                message: "class is updated"
-            })  
-        }
-        else {
-                res.status(404).json({
-                    message: "Cannot find class with given Id"
-                })
-        }
-    }
-    catch(err){
-        next(err)
-    }
-})
-
-
 
 module.exports = router
