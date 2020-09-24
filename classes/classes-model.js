@@ -6,38 +6,48 @@ function findClasses(){
 }
 
 function findBy(filter){
-    console.log('filter ', filter);
     return db("classes")
         .select("*")
-        .where(filter)
+        .where("class_id", filter)
         .first()
-}
-function add(newClass){
-    return db("classes").insert(newClass).returning("name")
-}
-function remove(id){
-    return db("classes")
-    .where("id", id)
-    .del()
 }
 function update(id, updateInfo){
     return db("classes")
     .where("id", id)
     .update(updateInfo)
 }
-function addAtt(classId, attendees){
-    console.log('classId ', classId);
-    console.log('attend ', attendees);
+function updateAtt(classId, attendees){
     return db("classes")
-    .where("id", classId)
-    .update({attendees: attendees})
+    .where("class_id", classId)
+    .update({attendees})
 }
+function addToUserClasses(object){
+    return db("users_classes").insert(object).returning("*")
 
+}
+function findObject(object){
+    return db("users_classes")
+    .where(function () {
+        this
+          .where("user_id",object.user_id)
+          .andWhere("class_id", object.class_id)
+      })
+}
+function removeFromUserClasses(object){
+    return db("users_classes")
+    .where(function(){
+        this
+        .where("user_id",object.user_id)
+        .andWhere("class_id", object.class_id)
+    })
+    .del()
+}
 module.exports= {
     findClasses,
     findBy,
-    add,
-    remove,
     update,
-    addAtt
+    updateAtt,
+    addToUserClasses,
+    findObject,
+    removeFromUserClasses,
 }

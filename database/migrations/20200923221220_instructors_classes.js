@@ -1,6 +1,6 @@
 
 exports.up = async function(knex) {
-    knex.schema.createTable("instructors_classes", (table) => {
+    await knex.schema.createTable("instructors_classes", (table) => {
     table
         .integer("instructor_id")
         .references("instructor_id")

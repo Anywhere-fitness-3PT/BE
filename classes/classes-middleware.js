@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken")
 
-function restrict(role) {
+function restrict() {
 	// use a scale, since admins should still be able to access basic endpoints
-    const roles = ["Client", "Admin", "Instructor"]
+    // const roles = ["Client", "Admin", "Instructor"]
     
 	return async (req, res, next) => {
 		const authError = {
@@ -24,11 +24,11 @@ function restrict(role) {
                 }
 
 				// make sure the user's role is above or the same as the required role
-                if (role && roles.indexOf(decoded.userRole) < roles.indexOf(role)) {
-					return res.status(403).json({
-						message: "You are not allowed here",
-					})
-				}
+                // if (role && roles.indexOf(decoded.userRole) < roles.indexOf(role)) {
+				// 	return res.status(403).json({
+				// 		message: "You are not allowed here",
+				// 	})
+				// }
 
 				// we know the user is authorized at this point,
 				// make the token's payload available to other middleware functions

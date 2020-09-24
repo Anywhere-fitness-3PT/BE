@@ -6,7 +6,7 @@ const restrict = require("./classes-middleware")
 
 const router = express.Router()
 
-router.get("/users/classes", restrict(), async(req, res, next) => {
+router.get("/clients/classes", restrict(), async(req, res, next) => {
     try{
         res.json(await Classes.findClasses())
     }
@@ -15,60 +15,55 @@ router.get("/users/classes", restrict(), async(req, res, next) => {
         next(err)
     }
 })
-router.post("/users/classes", restrict("Instructor"), async(req, res, next) => {
-    
-    try{
-        const {
-            name, 
-            instructor_name, 
-            type, 
-            start_time, 
-            end_time, 
-            level,
-            location,
-            attendees,
-            max_size,
-            schedule,
-            description
-        } = req.body
 
-        const findClass = await Classes.findBy({name}).first()
-        if(findClass){
-            return res.status(409).json({
-                message: "class name already taken"
+router.post("/clients/:id/classes/:classId", restrict(), async(req, res, next) => {
+    try {
+        const {classId} = req.params
+        const {id} = req.params
+        const findClass = await Classes.findBy(classId).first()
+        const object = {user_id: id, class_id: classId}
+        const findObject = await Classes.findObject(object).first()
+        let numAtt = findClass.attendees
+        const maxAtt = findClass.max_size
+        if(numAtt >= maxAtt){
+            res.json({
+                message: "Cannot sign up for class. Class is full"
             })
+        } else 
+        if(findObject){
+            res.json({
+                message: "You already sign up for this class"
+            })
+        } else
+        {
+            numAtt++;
+            await Classes.updateAtt(classId, numAtt)
+            await Classes.addToUserClasses(object)
+            res.json({
+                message: "You're signed up for the class"  })
         }
-
-        const newClass = await Classes.add({
-            name, 
-            instructor_name, 
-            type, 
-            start_time, 
-            end_time, 
-            level,
-            location,
-            attendees,
-            max_size,
-            schedule,
-            description
-        })
-        res.status(201).json(newClass)
-        
     }
-    catch(err){
+    catch (err){
         console.log(err)
         next(err)
     }
+    
 })
-router.delete("/users/classes/:id", restrict("Instructor"), async(req, res, next) => {
+router.delete("/clients/:id/classes/:classId", restrict(), async(req, res, next) => {
     try{  
-        const {id} = req.params  
-        const findClass = await Classes.findBy({id}).first()
+        const {classId} = req.params 
+        const {id} = req.params 
+        const findClass = await Classes.findBy(classId).first()
+        let numAtt = findClass.attendees
+        const object = {user_id: id, class_id: classId}
+        console.log('object', object)
+        console.log("findclass", findClass)
         if(findClass){
-            await Classes.remove(id)
+            numAtt--;
+            await Classes.updateAtt(classId, numAtt)
+            await Classes.removeFromUserClasses(object)
             res.json({
-                message: "Class Removed"
-            })
+                message: "You're withdrawn from the class"  })
         }
         else{
             res.status(404).json({
@@ -102,22 +97,6 @@ router.put("/users/classes/:id", restrict("Instructor"), async(req, res, next) =
     }
 })
 
-router.post("/users/classes/:classId", restrict(), async(req, res, next) => {
-    const {classId} = req.params
-    const findClass = await Classes.findBy({id: classId}).first()
-    let numAtt = findClass.attendees
-    const maxAtt = findClass.max_size
-    if(numAtt >= maxAtt){
-        res.json({
-            message: "Cannot sign up for class. Class is full"
-        })
-    } else 
-    {
-        numAtt++;
-        await Classes.addAtt(classId, numAtt);
-        res.json({
-            message: "You're signed up for the class"  })
-    }
-})
+
 
 module.exports = router
