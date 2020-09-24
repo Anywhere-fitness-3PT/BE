@@ -7,7 +7,7 @@ aws.config.AWS_DEFAULT_REGION
 
 // create an Email function
 function Email(to, sub, content) {
-    let ses = new.aws.SES();
+    let ses = new aws.SES()
 
     let from = "tashingsworth@gmail.com"
 
