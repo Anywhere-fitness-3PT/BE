@@ -84,7 +84,7 @@ router.post("/instructor/register", (req, res) => {
     });
   });
   
-  router.post("/verify/:token", (req, res) => {
+  router.post("instructor/verify/:token", (req, res) => {
     const { token } = req.params;
     const errors = {};
     db
@@ -127,7 +127,7 @@ router.post("/instructor/register", (req, res) => {
   });
   
   // Resend email route
-  router.post("/resend_email", (req, res) => {
+  router.post("instructor/resend_email", (req, res) => {
     const { errors, isValid } = checkResendField(req.body);
   
     if (!isValid) {
@@ -193,7 +193,7 @@ router.post("/instructor/register", (req, res) => {
   });
 
   // Forgot password
-router.post("/forgot", function(req, res) {
+router.post("instructor/forgot", function(req, res) {
     const { errors, isValid } = validateResetInput(req.body);
   
     if (!isValid) {
@@ -253,7 +253,7 @@ router.post("/forgot", function(req, res) {
   });
   
   // Reset password
-  router.post("/reset_password/:token", function(req, res) {
+  router.post("instructor/reset_password/:token", function(req, res) {
     const { token } = req.params;
     db
       .select(["id", "email"])
