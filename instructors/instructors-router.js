@@ -1,5 +1,8 @@
 const express = require("express")
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
+const crypto = require("crypto")
+const db = require("../database/dbConfig")
 const instructorOnly = require("./instructors-middleware")
 const Instructors = require("./instructors-model")
 // send Email utility
@@ -42,22 +45,23 @@ router.post("/instructor/register", (req, res) => {
       if (err) throw err;
       bcrypt.hash(req.body.password1, salt, (err, hash) => {
         if (err) throw err;
-        database("users")
-          .returning(["id", "email", "registered", "token"])
+        db("instructors")
+          .returning(["instructor_id", "email", "registered", "token"])
           .insert({
+            name: req.body.name,
             email: req.body.email,
             password: hash,
             registered: Date.now(),
             token: token,
             createdtime: Date.now(),
-            emailverified: "f",
+            emailVerified: "f",
             tokenusedbefore: "f"
           })
-          .then(user => {
-            let to = [user[0].email]; // Email address must be an array
+          .then(instructor => {
+            let to = [instructor[0].email]; // Email address must be an array
   
             // When you set up your front-end you can create a working verification link here
-            let link = "https://yourWebsite/v1/users/verify/" + user[0].token;
+            let link = "https://yourWebsite/v1/users/verify/" + instructor[0].token;
   
             // Subject of your email
             let sub = "Confirm Registration";
@@ -84,9 +88,9 @@ router.post("/instructor/register", (req, res) => {
   router.post("/verify/:token", (req, res) => {
     const { token } = req.params;
     const errors = {};
-    database
+    db
       .returning(["email", "emailverified", "tokenusedbefore"])
-      .from("users")
+      .from("instructors")
       .where({ token: token, tokenusedbefore: "f" })
       .update({ emailverified: "t", tokenusedbefore: "t" })
       .then(data => {
@@ -94,9 +98,9 @@ router.post("/instructor/register", (req, res) => {
           // Return an email verified message
           res.json("Email verified! Please login to access your account");
         } else {
-          database
+          db
             .select("email", "emailverified", "tokenusedbefore")
-            .from("users")
+            .from("instructors")
             .where("token", token)
             .then(check => {
               if (check.length > 0) {
@@ -113,13 +117,13 @@ router.post("/instructor/register", (req, res) => {
             })
             .catch(err => {
               errors.db = "Bad request";
-              res.status(400).json(errors);
+              res.status(400).json(err);
             });
         }
       })
       .catch(err => {
         errors.db = "Bad request";
-        res.status(400).json(errors);
+        res.status(400).json(err);
       });
   });
   
@@ -141,8 +145,8 @@ router.post("/instructor/register", (req, res) => {
       return resendToken;
     });
   
-    database
-      .table("users")
+    db
+      .table("instructors")
       .select("*")
       .where({ email: req.body.email })
       .then(data => {
@@ -150,8 +154,8 @@ router.post("/instructor/register", (req, res) => {
           errors.invalid = "Invalid email address. Please register again!";
           res.status(400).json(errors);
         } else {
-          database
-            .table("users")
+          db
+            .table("instructors")
             .returning(["email", "token"])
             .where({ email: data[0].email, emailverified: "false" })
             .update({ token: resendToken, createdtime: Date.now() })
@@ -179,13 +183,13 @@ router.post("/instructor/register", (req, res) => {
             })
             .catch(err => {
               errors.db = "Bad request";
-              res.status(400).json(errors);
+              res.status(400).json(err);
             });
         }
       })
       .catch(err => {
         errors.db = "Bad request";
-        res.status(400).json(errors);
+        res.status(400).json(err);
       });
   });
 
@@ -203,16 +207,16 @@ router.post("/forgot", function(req, res) {
       return resetToken;
     });
   
-    database
-      .table("users")
+    db
+      .table("instructors")
       .select("*")
       .where("email", req.body.email)
       .then(emailData => {
         if (emailData.length == 0) {
           res.status(400).json("Invalid email address");
         } else {
-          database
-            .table("users")
+          db
+            .table("instructors")
             .where("email", emailData[0].email)
             .update({
               reset_password_token: resetToken,
@@ -252,9 +256,9 @@ router.post("/forgot", function(req, res) {
   // Reset password
   router.post("/reset_password/:token", function(req, res) {
     const { token } = req.params;
-    database
+    db
       .select(["id", "email"])
-      .from("users")
+      .from("instructors")
       .where({ reset_password_token: token, reset_password_token_used: false })
       .then(data => {
         if (data.length > 0) {
@@ -268,20 +272,20 @@ router.post("/forgot", function(req, res) {
             if (err) throw err;
             bcrypt.hash(req.body.password1, salt, (err, hash) => {
               if (err) throw err;
-              database("users")
+              db("instructors")
                 .returning("email")
                 .where({ id: data[0].id, email: data[0].email })
                 .update({ password: hash, reset_password_token_used: true })
-                .then(user => {
+                .then(instructor => {
                   const subject = "Password change for your account.";
                   const content = `The password for your account registered under ${
-                    user[0]
+                    instructor[0]
                   } has been successfully changed.`;
                   sendEmail.Email(to, subject, content);
-                  res.json("Password successfully changed for " + user[0] + "!");
+                  res.json("Password successfully changed for " + instructor[0] + "!");
                 })
                 .catch(err => {
-                  res.status(400).json(errors);
+                  res.status(400).json(err);
                 });
             });
           });

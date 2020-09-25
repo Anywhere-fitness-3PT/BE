@@ -4,6 +4,7 @@ const helmet = require("helmet")
 var cookieParser = require('cookie-parser')
 const usersRouter = require("./users/users-router")
 const classesRouter = require("./classes/classes-router")
+const instructorsRouter = require("./instructors/instructors-router")
 
 const server = express()
 
@@ -14,6 +15,7 @@ server.use(cookieParser());
 
 server.use(usersRouter)
 server.use(classesRouter)
+server.use(instructorsRouter)
 
 server.get("/", (req, res) => {
     res.json({
