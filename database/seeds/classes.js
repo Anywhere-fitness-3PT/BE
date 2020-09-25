@@ -20,7 +20,7 @@ exports.seed = async function(knex) {
       duration: 60,
       level: 1, 
       location: "park2",
-      attendees: 14,
+      attendees: 5,
       max_size: 15,
       description: "class2"
     },
@@ -32,7 +32,7 @@ exports.seed = async function(knex) {
       duration: 60,
       level: 2, 
       location: "park3",
-      attendees: 13,
+      attendees: 8,
       max_size: 15,
       description: "class3"
     },

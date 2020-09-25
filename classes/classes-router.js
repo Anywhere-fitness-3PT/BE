@@ -4,6 +4,7 @@ const Classes = require("./classes-model")
 const restrict = require("./classes-middleware")
 
 
+
 const router = express.Router()
 
 router.get("/clients/classes", restrict(), async(req, res, next) => {
@@ -70,6 +71,17 @@ router.delete("/clients/:id/classes/:classId", restrict(), async(req, res, next)
                 message: "Cannot find class with given Id"
             })
         }
+    }
+    catch(err){
+        next(err)
+    }
+})
+
+router.get("/clients/:id/classes", restrict(), async (req, res, next) => {
+    try{
+        const {id} = req.params
+        classesByClientID = await Classes.findClassesByStudentId(id)
+        res.json(classesByClientID)
     }
     catch(err){
         next(err)
