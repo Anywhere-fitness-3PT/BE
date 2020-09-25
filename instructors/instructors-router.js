@@ -296,29 +296,29 @@ router.post("/forgot", function(req, res) {
   });
 
   // Creates a new class
-  router.post("/instructors/classes", async(req, res, next) => {
+  router.post("/instructor/classes", async(req, res, next) => {
     try {
       const newClass = req.body
-      await instructorClass.add(newClass)
+      await instructorClass.addClass(newClass)
       res.status(201).json(newClass)
     } catch(err) {
       next(err)
     }
   })
+
   // Edit a class
-  router.put("/instructors/classes/:id", async(req, res, next) => {
+  router.put("/instructor/classes/:id", async(req, res, next) => {
     try {
-      const classObj = await instructorClass.update(req.params.id, req.body)
+      const classObj = await instructorClass.editClass(req.params.id, req.body)
       res.json(classObj)
     } catch(err) {
       next(err)
     }
   })
   // Delete a class
-  router.delete("/isntructors/classes/:id", async (req, res, next) => {
+  router.delete("/instructor/classes/:id", async (req, res, next) => {
     try {
-      await instructorClass.removeClass(req.params.id)
-      const classObj = await instructorClass.findAll()
+      const classObj = await instructorClass.removeClass(req.params.id, req.body)
       res.json(classObj)
     } catch(err) {
       next(err)
