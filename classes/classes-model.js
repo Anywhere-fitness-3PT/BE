@@ -42,6 +42,7 @@ function removeFromUserClasses(object){
     })
     .del()
 }
+
 module.exports= {
     findClasses,
     findBy,

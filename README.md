@@ -68,4 +68,10 @@
 
 |DELETE:("/clients/:id/classes/:classId")    | signed in user can withdraw from a class |
 
+|POST:("/instructor/classes")  | instructor can add classes |
+
+|PUT:("instructor/classes/:id") | instructor can edit classes by class ID |
+
+|DELETE:("/instructor/classes/:id) | instructor can remove classes by class ID ||
+
 

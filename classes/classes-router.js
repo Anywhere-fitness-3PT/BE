@@ -77,4 +77,5 @@ router.delete("/clients/:id/classes/:classId", restrict(), async(req, res, next)
 })
 
 
+
 module.exports = router
