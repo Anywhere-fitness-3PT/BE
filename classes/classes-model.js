@@ -42,6 +42,12 @@ function removeFromUserClasses(object){
     })
     .del()
 }
+function findClassesByStudentId(id){
+    return db("users_classes")
+    .join("classes","users_classes.class_id", "classes.class_id")
+    .select("*")
+    .where("user_id", id)
+}
 module.exports= {
     findClasses,
     findBy,
@@ -50,4 +56,5 @@ module.exports= {
     addToUserClasses,
     findObject,
     removeFromUserClasses,
+    findClassesByStudentId
 }

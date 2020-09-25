@@ -56,6 +56,8 @@
 
 | URL              |                    |
 | ------ | ---------------- | --------------------------------------------------- |
+|
+
 |POST:("/clients/register")    | register user: {name, email, password} |
 
 |POST:("/clients/login")  | user sign-in:{ email, password }      |
