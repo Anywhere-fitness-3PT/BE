@@ -3,8 +3,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const crypto = require("crypto")
 const db = require("../database/dbConfig")
-const instructorOnly = require("./instructors-middleware")
-const Instructors = require("./instructors-model")
+const instructorClass = require("./instructors-model")
 // send Email utility
 const sendEmail = require("../utils/sendEmail")
 // Registration validation
@@ -295,5 +294,36 @@ router.post("/forgot", function(req, res) {
       })
       .catch(err => res.status(400).json("Bad request"));
   });
-  
+
+  // Creates a new class
+  router.post("/instructors/classes", async(req, res, next) => {
+    try {
+      const newClass = req.body
+      await instructorClass.add(newClass)
+      res.status(201).json(newClass)
+    } catch(err) {
+      next(err)
+    }
+  })
+  // Edit a class
+  router.put("/instructors/classes/:id", async(req, res, next) => {
+    try {
+      const classObj = await instructorClass.update(req.params.id, req.body)
+      res.json(classObj)
+    } catch(err) {
+      next(err)
+    }
+  })
+  // Delete a class
+  router.delete("/isntructors/classes/:id", async (req, res, next) => {
+    try {
+      await instructorClass.removeClass(req.params.id)
+      const classObj = await instructorClass.findAll()
+      res.json(classObj)
+    } catch(err) {
+      next(err)
+    }
+  })
+
+
   module.exports = router;

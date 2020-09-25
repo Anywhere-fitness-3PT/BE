@@ -10,6 +10,7 @@ exports.up = async function (knex) {
         .inTable("class_types")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
+      table.date("class_date");
       table.time("start_time").notNullable();
       table.time("end_time").notNullable();
       table
@@ -23,6 +24,7 @@ exports.up = async function (knex) {
       table.string("location").notNullable();
       table.integer("attendees").notNullable().default(0);
       table.integer("max_size").notNullable();
+      table.integer("duration").notNullable();
       table.text("description").nullable();
       table.timestamps(true, true);
     });
