@@ -42,6 +42,7 @@ function removeFromUserClasses(object){
     })
     .del()
 }
+
 function findClassesByStudentId(id){
     return db("users_classes")
     .join("classes","users_classes.class_id", "classes.class_id")

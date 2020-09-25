@@ -10,8 +10,10 @@ exports.up = async function (knex) {
         .inTable("class_types")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
+      table.date("class_date");
       table.time("start_time").notNullable();
       table.time("end_time").notNullable();
+      table.integer("duration").notNullable();
       table
         .integer("level")
         .notNullable()
