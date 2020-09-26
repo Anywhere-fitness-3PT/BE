@@ -11,11 +11,10 @@ router.post("/clients/register", async(req, res, next) =>{
         const {name, email, password} = req.body
         const user = await Users.findBy({email}).first();
         if(user){
-            res.status(409).json({
+            return res.status(409).json({
                 message: "Email Already Use"
             })
         } 
-        console.log('create new user');
         const newUser = await Users.add({
             name, 
             email,

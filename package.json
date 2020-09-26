@@ -6,9 +6,12 @@
   "scripts": {
     "test": "cross-env NODE_ENV=testing jest",
     "start": "node index.js",
-    "server": "cross-env NODE_ENV=development nodemon index.js",
+    "server": "cross-env NODE_ENV=development nodemon --require dotenv/config index.js",
     "migrate": "npx knex migrate:latest",
-    "seed": "npx knex seed:run"
+    "seed": "npx knex seed:run",
+    "test:watch": "jest --watch"
+
+
   },
   "jest": {
     "testEnvironment": "node"
